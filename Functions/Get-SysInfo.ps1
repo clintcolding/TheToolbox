@@ -1,8 +1,8 @@
 ﻿<#
 .Synopsis
-   Gathers local or remote system information.
+   Gathers system information.
 .DESCRIPTION
-   Long description
+   Returns local or remote system information. Designed to be used with Get-ADComputer.
 .EXAMPLE
    PS C:\Windows\system32> Get-ADComputer -Filter 'OperatingSystem -like "*server*"' | get-sysinfo | ft
 
@@ -13,7 +13,18 @@
 
    Builds server list from AD and then gathers system info.
 .EXAMPLE
-   
+   PS C:\Windows\system32> Get-Sysinfo
+
+   ComputerName : 100IT001
+   Description  : Clint Colding
+   OS           : Microsoft Windows 10 Pro
+   Asset Tag    : H3CXXXX
+   CPU          : 2
+   Memory       : 8
+   Manufacturer : Dell Inc.
+   Model        : Latitude E5440
+
+   Gathers localhost system info.
 #>
 function Get-Sysinfo{
 
