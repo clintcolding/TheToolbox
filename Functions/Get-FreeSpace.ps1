@@ -2,7 +2,7 @@
 .SYNOPSIS
    Displays available free space. 
 .DESCRIPTION
-   Displays available free space on local drives in bytes. System Reserved and Recovery drives is excluded.
+   Displays available free space on local drives. System Reserved and Recovery drives is excluded.
 .EXAMPLE
    Get-FreeSpace | Where-Object {[int]$_."Free(GB)" -lt "10"}
 
@@ -11,22 +11,27 @@
    Get-FreeSpace | Where-Object {[int]$_."Free(%)" -lt "20"}
 
    Returns computers with less than 20% free space.
+.EXAMPLE
+   Get-ADComputer -Filter 'OperatingSystem -like "*server*"' | Get-FreeSpace | ft
+
+   Builds server list from AD and gathers free space.
 #>
 function Get-FreeSpace
 {
     [CmdletBinding()]
     Param
     (
-        [Parameter(ValueFromPipeline=$true,
+        [Alias('ComputerName')]
+        [Parameter(ValueFromPipelineByPropertyName=$true,
                    Position=0)]
-        [String[]]$ComputerName='localhost'
+        [String[]]$Name='localhost'
     )
     Begin
     {
     }
     Process
     {
-        Foreach($Computer in $ComputerName)
+        Foreach($Computer in $Name)
         {
             Try{
                 $volume=Get-WmiObject -ComputerName $Computer Win32_Volume -ErrorAction Stop -ErrorVariable GFSError
