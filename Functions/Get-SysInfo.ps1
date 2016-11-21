@@ -32,7 +32,7 @@ function Get-Sysinfo{
 
     Param(
         
-
+        [Alias("ComputerName")]
         [Parameter(ValueFromPipelineByPropertyName=$true,
                    Position=0)]
         [string[]]$Name='localhost'
