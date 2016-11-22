@@ -50,7 +50,12 @@ function Set-GoDaddyDNS
         $Record = @{data="$IP";ttl=$TTL}
         $Body = ConvertTo-Json $Record
 
-        Invoke-WebRequest https://api.godaddy.com/v1/domains/$Domain/records/$Type/$Name -Method Put -Headers $Headers -Body $Body -ContentType "application/json" | Out-Null
+        try{
+            Invoke-WebRequest https://api.godaddy.com/v1/domains/$Domain/records/$Type/$Name -Method Put -Headers $Headers -Body $Body -ContentType "application/json" | Out-Null
+        }
+        catch [System.Net.WebException]{
+            Write-Warning 'API key and/or secret is incorrect.'
+        }
 
         Get-GoDaddyDNS -Domain $Domain -Type $Type -Name $Name
     }
