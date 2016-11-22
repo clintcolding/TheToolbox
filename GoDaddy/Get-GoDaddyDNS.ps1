@@ -52,7 +52,12 @@ function Get-GoDaddyDNS
         $Headers = @{}
         $Headers["Authorization"] = 'sso-key ' + $Key + ':' + $Secret
         
-        Invoke-WebRequest https://api.godaddy.com/v1/domains/$Domain/records/$Type/$Name -Method Get -Headers $Headers | ConvertFrom-Json
+        try{
+            Invoke-WebRequest https://api.godaddy.com/v1/domains/$Domain/records/$Type/$Name -Method Get -Headers $Headers | ConvertFrom-Json
+        }
+        catch [System.Net.WebException]{
+            Write-Warning 'API key and/or secret is incorrect.'
+        }
     }
     End
     {
