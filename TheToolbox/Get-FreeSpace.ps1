@@ -2,7 +2,7 @@
 .SYNOPSIS
    Displays available free space. 
 .DESCRIPTION
-   Displays available free space on local drives. System Reserved and Recovery drives is excluded.
+   Displays available free space on local drives. System Reserved and Recovery drives are excluded.
 .EXAMPLE
    Get-FreeSpace | Where-Object {[int]$_."Free(GB)" -lt "10"}
 
