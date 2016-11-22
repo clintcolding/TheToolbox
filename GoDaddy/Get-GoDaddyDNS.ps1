@@ -56,7 +56,7 @@ function Get-GoDaddyDNS
             Invoke-WebRequest https://api.godaddy.com/v1/domains/$Domain/records/$Type/$Name -Method Get -Headers $Headers | ConvertFrom-Json
         }
         catch [System.Net.WebException]{
-            Write-Warning 'API key and/or secret is incorrect.'
+            Write-Warning 'API key and/or secret is incorrect for Get-GoDaddyDNS.'
         }
     }
     End
