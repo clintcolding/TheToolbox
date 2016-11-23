@@ -10,4 +10,4 @@ The API Key and Secret are set as the default parameter values for `Get-GoDaddyD
 
 To import the GoDaddy module use `Import-Module .\GoDaddy.psd1`.
 
-To autoload the module, copy the GoDaddy folder to `C:\Users\%user%\Documents\WindowsPowershell\Modules`.
+To autoload the module, copy the GoDaddy folder to `%USERPROFILE%\Documents\WindowsPowershell\Modules`.
