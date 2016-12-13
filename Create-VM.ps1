@@ -1,8 +1,8 @@
 ﻿<#
 .Synopsis
-   Creates a VMware virtual machine based on preset values.
+   Creates a VMware virtual machine based on default values.
 .DESCRIPTION
-   Creates a VMware virtual machine based on environmental validated values.
+   Creates a VMware virtual machine based on environment specific values.
 .EXAMPLE
    PS C:\> Create-VM -VMName TESTVM1
 
