@@ -16,6 +16,9 @@
    ScsiControllerType : ParaVirtual
    IsoPath            : [E1VD1] ISOs/WinSvrDataCtr2012.ISO
    FloppyPath         : [] /vmimages/floppies/pvscsi-Windows2008.flp
+
+   
+   Creates a VM named TESTVM1 with default values.
 #>
 function Create-VM
 {
