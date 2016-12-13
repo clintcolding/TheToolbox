@@ -1,12 +1,21 @@
 ﻿<#
 .Synopsis
-   Short description
+   Creates a VMware virtual machine based on preset values.
 .DESCRIPTION
-   Long description
+   Creates a VMware virtual machine based on environmental validated values.
 .EXAMPLE
-   Example of how to use this cmdlet
-.EXAMPLE
-   Another example of how to use this cmdlet
+   PS C:\> Create-VM -VMName TESTVM1
+
+
+   Name               : TESTVM1
+   NumCpu             : 1
+   MemoryGB           : 2
+   VMHost             : 100esx03.a1.local
+   Folder             : Tampa VMs
+   DiskGB             : 42.209745041094720363616943359
+   ScsiControllerType : ParaVirtual
+   IsoPath            : [E1VD1] ISOs/WinSvrDataCtr2012.ISO
+   FloppyPath         : [] /vmimages/floppies/pvscsi-Windows2008.flp
 #>
 function Create-VM
 {
@@ -69,7 +78,7 @@ function Create-VM
     {
         Add-PSSnapin VMware.VimAutomation.Core
         Write-Verbose "Connecting to $VIServer..."
-        Connect-VIServer $VIServer | Out-Null
+        Connect-VIServer $VIServer -WarningAction SilentlyContinue | Out-Null
     }
     Process
     {                       
