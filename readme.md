@@ -2,7 +2,7 @@
 
 The Toolbox is a catch all for my miscellaneous functions.
 
-##Command Overview
+##Module Overview
 
 - Desired State Configuration
   - Compile-DSCConfiguration - Compiles your DSC configuration MOFs and copies them to your pull server.
