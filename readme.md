@@ -2,6 +2,6 @@
 
 The Toolbox is a catch all for my miscellaneous functions.
 
-##- Exchange
-	- Remove-AutoMapping
+- ##Exchange
+  - Remove-AutoMapping
 
