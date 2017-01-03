@@ -54,26 +54,29 @@ function Update-ComputerDescription
     {  
         try{
             if($Path){
-                $Data=Import-Csv $Path
+                $Data = Import-Csv $Path
 
                 foreach($Entry in $Data){
-                $ComputerName=$($Entry.computername)
-                $Description=$($Entry.description)
+                $ComputerName = $($Entry.computername)
+                $Description = $($Entry.description)
         
                 Update-ComputerDescription -ComputerName $ComputerName -Description $Description
                 }
             }
             else{
-                $OSObj=Get-WmiObject Win32_OperatingSystem -ComputerName $ComputerName -ErrorAction Stop
-                $OSObj.Description=$Description
+                $OSObj = Get-WmiObject Win32_OperatingSystem -ComputerName $ComputerName -ErrorAction Stop
+                $OSObj.Description = $Description
                 $OSObj.put() | Out-Null
         
                 Write-Host "Description of $ComputerName updated to $Description"
             }
         }
-        catch{
-                Write-Warning "Could not connect to $ComputerName."
+
+        catch [System.Runtime.InteropServices.COMException]{
+                Write-Error "Could not connect to $ComputerName."
         }
+
+        catch {}
     }
     End
     {
