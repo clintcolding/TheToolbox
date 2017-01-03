@@ -11,6 +11,7 @@ The Toolbox is a catch all for my miscellaneous functions.
 - Utilities
   - Get-FreeSpace - Displays available free space on local and remote computers.
   - Get-LastUpdate - Gets the last update installed on a computer.
+  - Get-LoggedOnUser - Gets the current logged on user account.
   - Get-PublicIP - A simple function that returns your public IP.
   - Get-SysInfo - Gathers local and/or remote system information.
   - New-Password - Generates a random password using ASCII printable characters.
