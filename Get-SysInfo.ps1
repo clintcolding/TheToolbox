@@ -62,7 +62,8 @@ function Get-Sysinfo{
       
                       }
 
-                $Obj=New-Object -TypeName PSObject -Property $Prop
+                $Obj = New-Object -TypeName PSObject -Property $Prop
+
                 Write-Output $Obj
             }
         }
