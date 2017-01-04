@@ -36,17 +36,20 @@ function Get-LoggedOnUser
     Process
     {
         foreach($Computer in $Name){
-        
-            $LoggedOnUser = Get-WMIObject -ComputerName $Computer -Class Win32_ComputerSystem | Select-Object Username
 
-            $Prop = [ordered] @{
-                'ComputerName' = $Computer
-                'LoggedOnUser' = $LoggedOnUser.Username
+            if ( (Test-Connection $Computer -Count 2 -Quiet) -eq 'True' ) {
+        
+                $LoggedOnUser = Get-WMIObject -ComputerName $Computer -Class Win32_ComputerSystem | Select-Object Username
+
+                $Prop = [ordered] @{
+                    'ComputerName' = $Computer
+                    'LoggedOnUser' = $LoggedOnUser.Username
+                }
+        
+                $Obj = New-Object -TypeName PSObject -Property $Prop
+
+                Write-Output $Obj
             }
-        
-            $Obj = New-Object -TypeName PSObject -Property $Prop
-
-            Write-Output $Obj
         }
     }
     End
