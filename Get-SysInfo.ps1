@@ -4,7 +4,7 @@
 .DESCRIPTION
    Returns local or remote system information. Designed to be used with Get-ADComputer.
 .EXAMPLE
-   PS C:\Windows\system32> Get-ADComputer -Filter 'OperatingSystem -like "*server*"' | get-sysinfo | ft
+   PS C:\Windows\system32> Get-ADComputer -Filter 'OperatingSystem -like "*server*"' | Get-SysInfo | ft
 
    ComputerName Description     OS                                         Asset Tag CPU Memory Manufacturer Model 
    ------------ -----------     --                                         --------- --- ------ ------------ ----- 
@@ -13,7 +13,7 @@
 
    Builds server list from AD and then gathers system info.
 .EXAMPLE
-   PS C:\Windows\system32> Get-Sysinfo
+   PS C:\Windows\system32> Get-SysInfo
 
    ComputerName : 100IT001
    Description  : Clint Colding
@@ -26,7 +26,7 @@
 
    Gathers localhost system info.
 #>
-function Get-Sysinfo{
+function Get-SysInfo{
 
     [CmdletBinding()]
 
