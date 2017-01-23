@@ -24,10 +24,9 @@ function Get-LoggedOnUser
     Param
     (
         [Alias("ComputerName")]
-        [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true,  
+        [Parameter(ValueFromPipelineByPropertyName=$true,  
                    Position=0)]
-        [string[]]$Name
+        [string[]]$Name = 'localhost'
     )
 
     Begin
