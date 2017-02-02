@@ -14,18 +14,13 @@ function Test-ADComputer
 
     Param
     (
-        # Param1 help description
-        [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=0)]
-        $Filter,
-
-        $ComputerName
+        [Parameter(Mandatory=$true)]
+        $Filter
     )
 
     Begin
     {
-        $Computers = Get-ADComputer -Filter *
+        $Computers = Get-ADComputer -Filter $Filter
     }
     Process
     {
