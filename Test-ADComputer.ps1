@@ -1,12 +1,28 @@
 ﻿<#
 .Synopsis
-   Short description
+   Returns online/offline status of AD computers.
 .DESCRIPTION
-   Long description
+   Returns online/offline status of AD computers based on Test-Connection results.
 .EXAMPLE
-   Example of how to use this cmdlet
+   PS C:\> Test-ADComputer -Filter *
+
+   ComputerName Status
+   ------------ ------
+   DC01         Online
+   DEV01        Online
+   DEV02        Online
+
+   Returns the status of all AD computers.
 .EXAMPLE
-   Another example of how to use this cmdlet
+   PS C:\> Test-ADComputer -Filter * | where {$_.status -eq 'Offline'}
+
+   ComputerName Status
+   ------------ ------
+   DC02         Offline
+   DEV03        Offline
+   DEV04        Offline
+
+   Only returns AD computers with the status of Offline.
 #>
 function Test-ADComputer
 {
