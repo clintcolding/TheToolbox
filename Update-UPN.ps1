@@ -9,6 +9,11 @@
 
    Updates AD user ccolding's UPN to ccolding@contoso.com
 
+.EXAMPLE
+   PS C:\> Update-UPN -Filter 'UserPrincipalName -like "*contoso.local"' -UPN contoso.com
+
+   Updates all users with a UPN like contoso.local to contoso.com
+
 .PARAMETER UPN
    Specifies the UserPrincipleName you wish to set for the selected users.
 .PARAMETER FILTER
@@ -46,8 +51,6 @@ function Update-UPN
 
                     $User | Set-ADUser -UserPrincipalName $NewUPN
 
-                    $User.UserPrincipalName
-
                 }
         
         }
@@ -61,8 +64,6 @@ function Update-UPN
                     $NewUPN = $User.SamAccountName + "@" + $UPN
 
                     $User | Set-ADUser -UserPrincipalName $NewUPN
-
-                    $User.UserPrincipalName
 
                 }
 
