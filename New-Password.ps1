@@ -7,6 +7,10 @@
    PS C:\> New-Password -Length 10
 
    iEDQ5s}xoJ
+.EXAMPLE
+   PS C:\> New-Password -LettersNumbersOnly
+
+   Z55Yjf1M4rSVNg4OCTaR
 #>
 function New-Password{
 
@@ -14,21 +18,49 @@ function New-Password{
     Param
     (
         [Parameter(Position=0)]
-        [int]$Length=20
+        [int]$Length=20,
+
+        [switch]$LettersNumbersOnly
     )
 
     Process{
     
         $ascii=$null
     
-        for($a=33; $a –le 126; $a++){
-            $ascii+=,[char][byte]$a
+        if($LettersNumbersOnly){
+
+            for($a=48; $a –le 57; $a++){
+                $ascii+=,[char][byte]$a
+            }
+
+            for($a=65; $a –le 90; $a++){
+                $ascii+=,[char][byte]$a
+            }
+
+            for($a=97; $a –le 122; $a++){
+                $ascii+=,[char][byte]$a
+            }
+
+            for($i=1; $i –le $length; $i++){
+                $TempPassword+=($ascii | Get-Random)
+            }
+
+            $TempPassword
+        
         }
 
-        for($i=1; $i –le $length; $i++){
-            $TempPassword+=($ascii | Get-Random)
-        }
+        else{
+        
+            for($a=33; $a –le 126; $a++){
+                $ascii+=,[char][byte]$a
+            }
 
-        $TempPassword
+            for($i=1; $i –le $length; $i++){
+                $TempPassword+=($ascii | Get-Random)
+            }
+
+            $TempPassword
+
+        }
     }
 }
