@@ -4,6 +4,9 @@ The Toolbox is a catch all for my miscellaneous functions.
 
 ##Module Overview
 
+- Active Directory
+  - Test-ADComputer - Returns online/offline status of AD computers.
+  - Update-UPN - Updates the UserPrincipleName for a selection of AD users.
 - Desired State Configuration
   - Compile-DSCConfiguration - Compiles your DSC configuration MOFs and copies them to your pull server.
 - Exchange
