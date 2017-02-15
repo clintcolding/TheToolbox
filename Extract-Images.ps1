@@ -1,12 +1,10 @@
 ﻿<#
 .Synopsis
-   Short description
+   Extracts images from a Word document.
 .DESCRIPTION
-   Long description
+   Extracts all images from a .docx Word document and saves them in the root folder.
 .EXAMPLE
-   Example of how to use this cmdlet
-.EXAMPLE
-   Another example of how to use this cmdlet
+   PS C:\> Extract-Images C:\Users\ccolding\Desktop\MyNewFolder\MyDoc.docx
 #>
 function Extract-Images
 {
