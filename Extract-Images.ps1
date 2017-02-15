@@ -28,7 +28,7 @@ function Extract-Images
     {
         Set-Location $Dir.directory
 
-        New-Item -ItemType Directory -Name ExtractImage
+        New-Item -ItemType Directory -Name ExtractImage | Out-Null
 
         Copy-Item -Path $Path -Destination .\ExtractImage
 
