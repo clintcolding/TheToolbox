@@ -20,6 +20,7 @@ function Extract-Image
 
     Begin
     {
+        $Location = Get-Location
         $Dir      = dir $Path
         $FileName = $Path.Substring($Path.LastIndexOf("\") +1)
         $Name     = $Filename.Substring(0,$FileName.IndexOf("."))
@@ -43,6 +44,7 @@ function Extract-Image
                 }
 
         Remove-Item .\ExtractImage -Recurse -Force
+        Set-Location $Location
     }
     End
     {
