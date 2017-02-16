@@ -6,7 +6,7 @@
 .EXAMPLE
    PS C:\> Extract-Images C:\Users\ccolding\Desktop\MyNewFolder\MyDoc.docx
 #>
-function Extract-Images
+function Extract-Image
 {
     [CmdletBinding()]
 
@@ -20,14 +20,14 @@ function Extract-Images
 
     Begin
     {
-        $Dir = dir $Path
-
+        $Dir      = dir $Path
         $FileName = $Path.Substring($Path.LastIndexOf("\") +1)
+        $Name     = $Filename.Substring(0,$FileName.IndexOf("."))
     }
     Process
     {
         Set-Location $Dir.directory
-
+        
         New-Item -ItemType Directory -Name ExtractImage | Out-Null
 
         Copy-Item -Path $Path -Destination .\ExtractImage
@@ -39,7 +39,12 @@ function Extract-Images
         $Images = Get-ChildItem .\ExtractImage\word\media
 
         foreach ($Image in $Images) {
-            Copy-Item $Image.fullname .\}
+            
+            $NewName = ($Image.Name).Replace("image","$Name")
+            Copy-Item $Image.fullname .\
+            Rename-Item $Image $NewName
+            
+            }
 
         Remove-Item .\ExtractImage -Recurse -Force
     }
