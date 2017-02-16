@@ -4,7 +4,7 @@
 .DESCRIPTION
    Extracts all images from a .docx Word document and saves them in the root folder.
 .EXAMPLE
-   PS C:\> Extract-Images C:\Users\ccolding\Desktop\MyNewFolder\MyDoc.docx
+   PS C:\> Extract-Image C:\Users\ccolding\Desktop\MyNewFolder\MyDoc.docx
 #>
 function Extract-Image
 {
@@ -27,24 +27,20 @@ function Extract-Image
     Process
     {
         Set-Location $Dir.directory
-        
         New-Item -ItemType Directory -Name ExtractImage | Out-Null
-
         Copy-Item -Path $Path -Destination .\ExtractImage
-
         Rename-Item .\ExtractImage\$FileName Copy.zip
-
         Expand-Archive .\ExtractImage\Copy.zip -DestinationPath .\ExtractImage
 
         $Images = Get-ChildItem .\ExtractImage\word\media
 
-        foreach ($Image in $Images) {
+            foreach ($Image in $Images) {
             
-            $NewName = ($Image.Name).Replace("image","$Name")
-            Copy-Item $Image.fullname .\
-            Rename-Item $Image $NewName
+                $NewName = ($Image.Name).Replace("image","$Name")
+                Copy-Item $Image.fullname .\
+                Rename-Item $Image $NewName
             
-            }
+                }
 
         Remove-Item .\ExtractImage -Recurse -Force
     }
