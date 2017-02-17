@@ -15,36 +15,43 @@ function Extract-Image
         # Path to Word document
         [Parameter(Mandatory=$true,
                    Position=0)]
-        $Path
+        [string[]]$Path
     )
 
     Begin
     {
-        $Location = Get-Location
-        $Dir      = dir $Path
-        $FileName = $Path.Substring($Path.LastIndexOf("\") +1)
-        $Name     = $Filename.Substring(0,$FileName.IndexOf("."))
     }
     Process
     {
-        Set-Location $Dir.directory
-        New-Item -ItemType Directory -Name ExtractImage | Out-Null
-        Copy-Item -Path $Path -Destination .\ExtractImage
-        Rename-Item .\ExtractImage\$FileName Copy.zip
-        Expand-Archive .\ExtractImage\Copy.zip -DestinationPath .\ExtractImage
+        foreach ($Entry in $Path) {
 
-        $Images = Get-ChildItem .\ExtractImage\word\media
+            $Location = Get-Location
 
-            foreach ($Image in $Images) {
+            $Dir      = dir $Entry
+            $FileName = $Entry.Substring($Entry.LastIndexOf("\") +1)
+            $Name     = $Filename.Substring(0,$FileName.IndexOf("."))
+        
+            Set-Location $Dir.DirectoryName
+            New-Item -ItemType Directory -Name ExtractImage | Out-Null
+            Copy-Item -Path .\$FileName -Destination .\ExtractImage
+            Rename-Item .\ExtractImage\$FileName Copy.zip
+            Expand-Archive .\ExtractImage\Copy.zip -DestinationPath .\ExtractImage
+
+            $Images = Get-ChildItem .\ExtractImage\word\media
+
+                foreach ($Image in $Images) {
             
-                $NewName = ($Image.Name).Replace("image","$Name")
-                Copy-Item $Image.fullname .\
-                Rename-Item $Image $NewName
+                    $NewName = ($Image.Name).Replace("image","$Name")
+                    Copy-Item $Image.fullname .\
+                    Rename-Item $Image $NewName
             
-                }
+                    }
 
-        Remove-Item .\ExtractImage -Recurse -Force
-        Set-Location $Location
+            Remove-Item .\ExtractImage -Recurse -Force
+
+            Set-Location $Location        
+    
+        }
     }
     End
     {
