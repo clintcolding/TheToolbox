@@ -69,14 +69,14 @@ function Get-SysInfo{
         }
 
         catch [System.Runtime.InteropServices.COMException]{
-            Write-Warning "Could not connect to $Computer."    
+            $Warning = Write-Warning "Could not connect to $Computer."    
         }
         
         catch{
-            Write-Error $AssetError
-            Write-Error $CPUError
-            Write-Error $OSError
-            Write-Error $SysError
+            $AssetError
+            $CPUError
+            $OSError
+            $SysError
         }
     }
 }
