@@ -6,9 +6,9 @@
 .PARAMETER Datastore
    The name of the datastore you wish to map.
 .PARAMETER Drive
-   The drive name to map the datastore to.
+   The drive name to map the datastore to. Default is ds.
 .EXAMPLE
-   Map-Datastore -Datastore datastore1 -Drive ds
+   Map-Datastore -Datastore datastore1
 
    This example maps datastore1 to ds:\.
 .EXAMPLE
@@ -30,7 +30,7 @@ function Map-Datastore
         # The drive name to map the datastore to.
         [Parameter(Mandatory=$true,
                    Position=1)]
-        $Drive
+        $Drive = 'ds'
     )
 
     Begin
@@ -40,7 +40,7 @@ function Map-Datastore
     {
         # Get specified datastore.
         try{
-            $DS=Get-Datastore $Datastore}
+            $DS = Get-Datastore $Datastore}
         catch{
             Write-Warning "Can't find datastore $Datastore."
             break}
