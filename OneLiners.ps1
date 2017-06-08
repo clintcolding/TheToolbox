@@ -25,4 +25,4 @@ foreach ($entry in $path) {
 
 Get-HardDisk -VM 100WSUS01 | Set-HardDisk -CapacityGB 400 -ResizeGuestPartition
 
-### Test Oneliner ###
+### 
