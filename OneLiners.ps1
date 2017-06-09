@@ -25,4 +25,8 @@ foreach ($entry in $path) {
 
 Get-HardDisk -VM 100WSUS01 | Set-HardDisk -CapacityGB 400 -ResizeGuestPartition
 
-### 
+### Get AD User Group Membership ###
+
+$user = 'ccolding'
+
+Get-ADPrincipalGroupMembership $user | Select-Object -Property Name, GroupScope, GroupCategory | Sort-Object -Property Name | FT -A
