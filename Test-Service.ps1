@@ -31,33 +31,36 @@ function Test-Service
     }
     Process
     {
-        Write-Verbose "Testing $Service service status."
-            
-            foreach ($Server in $ComputerName) {
+        
+        foreach ($Server in $ComputerName) {
     
+            Write-Verbose "[$Server]    Testing $Service service"
+                
+            $Status = Get-Service -ComputerName $Server -Name $Service
+
+            if ($Status.Status -eq 'Running') {
+
+                Write-Verbose "[$Server]    $Service service is running" }
+
+            if ($Status.Status -eq 'Stopped') {
+
+                Write-Warning "[$Server]    $Service service is stopped"
+
+                Write-Verbose "[$Server]    Attempting to start $Service service"
+                    
+                Invoke-Command -ComputerName $Server -ScriptBlock {param($svc) Start-Service $svc} -ArgumentList $Service
+                    
                 $Status = Get-Service -ComputerName $Server -Name $Service
 
-                if ($Status.Status -eq 'Running') {
+                    if ($Status.Status -eq 'Running') {
 
-                    Write-Verbose "$Service service is running on $Server" }
+                    Write-Verbose "[$Server]    $Service service is running" }
 
-                if ($Status.Status -eq 'Stopped') {
+                    if ($Status.Status -eq 'Stopped') {
 
-                    Write-Warning "$Service service is stopped on $Server. Starting service..."
-                    
-                    Invoke-Command -ComputerName $Server -ScriptBlock {param($svc) Start-Service $svc} -ArgumentList $Service
-                    
-                    $Status = Get-Service -ComputerName $Server -Name $Service
+                    Write-Warning "[$Server]    Unable to start $Service service" }
 
-                        if ($Status.Status -eq 'Running') {
-
-                        Write-Verbose "$Service service is running on $Server" }
-
-                        if ($Status.Status -eq 'Stopped') {
-
-                        Write-Verbose "Unable to start $Service on $Server" }
-
-                }
+            }
         }
     }
     End
