@@ -18,8 +18,7 @@ function Test-Service
 {
     [CmdletBinding()]
 
-    Param
-    (
+    Param(
 
     [Parameter(Mandatory=$true)]
     [String[]]$ComputerName,
@@ -31,27 +30,20 @@ function Test-Service
 
     Begin
     {
-
         $VerbosePreference = 'Continue'
-
     }
     Process
     {
-        
         foreach ($Server in $ComputerName) {
-    
             Write-Verbose "[$Server]    Testing $Service service"
                 
             $Status = Get-Service -ComputerName $Server -Name $Service
 
             if ($Status.Status -eq 'Running') {
-
                 Write-Verbose "[$Server]    PASSED" }
 
             if ($Status.Status -eq 'Stopped') {
-
                 Write-Warning "[$Server]    FAILED"
-
                 Write-Warning "[$Server]    Starting $Service service"
                     
                 Invoke-Command -ComputerName $Server -ScriptBlock {param($svc) Start-Service $svc} -ArgumentList $Service
@@ -59,20 +51,15 @@ function Test-Service
                 $Status = Get-Service -ComputerName $Server -Name $Service
 
                     if ($Status.Status -eq 'Running') {
-
-                    Write-Verbose "[$Server]    PASSED" }
+                        Write-Verbose "[$Server]    PASSED" }
 
                     if ($Status.Status -eq 'Stopped') {
-
-                    Write-Warning "[$Server]    FAILED" }
-
+                        Write-Warning "[$Server]    FAILED" }
             }
         }
     }
     End
     {
-
         $VerbosePreference = 'SilentlyContinue'
-
     }
 }
