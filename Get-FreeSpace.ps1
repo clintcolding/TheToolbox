@@ -28,6 +28,7 @@ function Get-FreeSpace
     )
     Begin
     {
+           Write-Verbose 'Testing'
     }
     Process
     {
