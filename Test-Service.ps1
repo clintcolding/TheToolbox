@@ -31,6 +31,9 @@ function Test-Service
 
     Begin
     {
+
+        $VerbosePreference = 'Continue'
+
     }
     Process
     {
@@ -68,5 +71,8 @@ function Test-Service
     }
     End
     {
+
+        $VerbosePreference = 'SilentlyContinue'
+
     }
 }
