@@ -58,9 +58,13 @@ function Test-Service
                     
                     $Status = Get-Service -ComputerName $Server -Name $Service
 
-                    if ($Status.Status -eq 'Running') {
+                        if ($Status.Status -eq 'Running') {
 
-                    Write-Verbose "$Service service is running on $Server" }
+                        Write-Verbose "$Service service is running on $Server" }
+
+                        if ($Status.Status -eq 'Stopped') {
+
+                        Write-Verbose "Unable to start $Service on $Server" }
 
                 }
         }
