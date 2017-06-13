@@ -4,12 +4,15 @@
 .DESCRIPTION
    Determines if a service is running or stopped. If stopped, Test-Service will attempt to start.
 .EXAMPLE
-   C:\> Test-Service -ComputerName DC01,DC02,DC03 -Service DNS -Verbose
-   VERBOSE: Testing DNS service status.
-   VERBOSE: DNS service is running on DC01
-   VERBOSE: DNS service is running on DC02
-   WARNING: DNS service is stopped on DC03. Starting service...
-   VERBOSE: DNS service is running on DC03
+    C:\> Test-Service -ComputerName DC01,DC02,DC03 -Service DNS -Verbose
+   VERBOSE: [DC01]    Testing DNS service
+   VERBOSE: [DC01]    PASSED
+   VERBOSE: [DC02]    Testing DNS service
+   VERBOSE: [DC02]    PASSED
+   VERBOSE: [DC03]    Testing DNS service
+   WARNING: [DC03]    FAILED
+   WARNING: [DC03]    Starting DNS service
+   VERBOSE: [DC03]    PASSED
 #>
 function Test-Service
 {
@@ -40,13 +43,13 @@ function Test-Service
 
             if ($Status.Status -eq 'Running') {
 
-                Write-Verbose "[$Server]    $Service service is running" }
+                Write-Verbose "[$Server]    PASSED" }
 
             if ($Status.Status -eq 'Stopped') {
 
-                Write-Warning "[$Server]    $Service service is stopped"
+                Write-Warning "[$Server]    FAILED"
 
-                Write-Verbose "[$Server]    Attempting to start $Service service"
+                Write-Warning "[$Server]    Starting $Service service"
                     
                 Invoke-Command -ComputerName $Server -ScriptBlock {param($svc) Start-Service $svc} -ArgumentList $Service
                     
@@ -54,11 +57,11 @@ function Test-Service
 
                     if ($Status.Status -eq 'Running') {
 
-                    Write-Verbose "[$Server]    $Service service is running" }
+                    Write-Verbose "[$Server]    PASSED" }
 
                     if ($Status.Status -eq 'Stopped') {
 
-                    Write-Warning "[$Server]    Unable to start $Service service" }
+                    Write-Warning "[$Server]    FAILED" }
 
             }
         }
