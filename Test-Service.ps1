@@ -4,7 +4,7 @@
 .DESCRIPTION
    Determines if a service is running or stopped. If stopped, Test-Service will attempt to start.
 .EXAMPLE
-    C:\> Test-Service -ComputerName DC01,DC02,DC03 -Service DNS -Verbose
+    C:\> Test-Service -ComputerName DC01,DC02,DC03 -Service DNS
    VERBOSE: [DC01]    Testing DNS service
    VERBOSE: [DC01]    PASSED
    VERBOSE: [DC02]    Testing DNS service
