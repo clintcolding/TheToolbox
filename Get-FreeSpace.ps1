@@ -44,6 +44,7 @@ function Get-FreeSpace
                             'ComputerName' = $Computer
                             'Drive'        = $drive.name
                             'Description'  = $drive.label
+                            'Total(GB)'    = ($drive.capacity / 1GB).ToString("F0")
                             'Free(GB)'     = ($drive.freespace / 1GB).ToString("F1")
                             'Free(%)'      = (($drive.freespace / $drive.capacity)*100).ToString("F1")
                         }
