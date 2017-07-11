@@ -18,6 +18,7 @@ The Toolbox is a catch all for my miscellaneous functions.
     - Get-PublicIP - A simple function that returns your public IP.
     - Get-SysInfo - Gathers local and/or remote system information.
     - New-Password - Generates a random password using ASCII printable characters.
+    - Test-Service - Tests and corrects the status of a service.
     - Update-ComputerDescription - Updates the description of specified remote computers.
 - VMware
     - Create-VM - Creates a VMware virtual machine based on environment specific values.
