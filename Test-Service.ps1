@@ -54,7 +54,7 @@ function Test-Service
                         Write-Verbose "[$Server]    PASSED" }
 
                     if ($Status.Status -eq 'Stopped') {
-                        Write-Warning "[$Server]    FAILED" }
+                        Write-Warning "[$Server]    Cannot start $Service service" }
             }
         }
     }
