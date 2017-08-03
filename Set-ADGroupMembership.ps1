@@ -3,6 +3,7 @@ $group = "IT"
 
 
 ## Test to ensure the provided Group exists.
+    ## By using Filter, if the group doesn't exist, $null is returned instead of an error.
 
 if ((Get-ADGroup -Filter {SamAccountName -eq $group}).Name -ne $group) {
     Write-Error -Message "The group $group does not exist. Please check spelling and try again."
