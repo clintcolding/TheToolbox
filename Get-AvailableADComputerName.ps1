@@ -6,28 +6,32 @@ function Get-AvailableADComputerName
     (
         [Parameter(Mandatory=$true,
                    Position=0)]
-        [ValidateSet('100NB','100WK')]
+        [ValidateSet('Desktop','Laptop')]
         [string[]]$Type
     )
 
     Begin
     {
+        switch ($Type) {
+            'Desktop' { $NameConvention = '100WK' }
+            'Laptop'  { $NameConvention = '100NB' }
+        }
     }
     Process
     {
         # Get all computers starting with the specified descriptor.
 
-        $Computers = Get-ADComputer -Filter * | Where-Object {$_.Name -like "$Type*"} | Select-Object Name
+        $Computers = Get-ADComputer -Filter * | Where-Object {$_.Name -like "$NameConvention*"} | Select-Object Name
 
         # Create empty array
 
         [System.Collections.ArrayList]$ComputerList = @()
 
-        # Cycle through each computer in the $Computers variable and remove the $Type.
+        # Cycle through each computer in the $Computers variable and remove the $NameConvention.
         # Then add the remaining value to the $ComputerList array.
 
         foreach ($Name in $Computers) {
-            $ID = $Name.name.replace($Type,'')
+            $ID = $Name.name.replace($NameConvention,'')
             $ComputerList.add($id) | Out-Null
         }
 
@@ -53,17 +57,17 @@ function Get-AvailableADComputerName
             }
         }
 
-        # Reconstruct computername using $Type and adding back leading zeros if needed
+        # Reconstruct computername using $NameConvention and adding back leading zeros if needed
 
-        if ($AvailableID.Length -eq 1) {$NewName = ("$Type" + "00" + "$AvailableID")}
-        if ($AvailableID.Length -eq 2) {$NewName = ("$Type" + "0" + "$AvailableID")}
-        if ($AvailableID.Length -eq 3) {$NewName = ("$Type" + "$AvailableID")}
+        if ($AvailableID.Length -eq 1) {$NewName = ("$NameConvention" + "00" + "$AvailableID")}
+        if ($AvailableID.Length -eq 2) {$NewName = ("$NameConvention" + "0" + "$AvailableID")}
+        if ($AvailableID.Length -eq 3) {$NewName = ("$NameConvention" + "$AvailableID")}
 
         # Test to ensure $NewName is truly available (it should return an error)
         # If $NewName is availble return $NewName, if it isn't return Write-Output
 
         try {Get-ADComputer $NewName -ErrorAction Stop | Out-Null
-            Write-Output "Cannot find available ID for $Type"}
+            Write-Output "Cannot find available $Type name..."}
             catch {$NewName}
     }
     End
