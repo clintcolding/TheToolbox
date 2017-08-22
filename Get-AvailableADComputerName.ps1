@@ -1,3 +1,16 @@
+<#
+.Synopsis
+   Finds available computer name in AD
+.DESCRIPTION
+   Finds the first available computer name in AD based on a set naming scheme. The scheme must end with a three digit unique ID.
+.EXAMPLE
+   PS C:\bin> Get-AvailableADComputerName Desktop
+   100WK054
+.EXAMPLE
+   PS C:\bin> Get-AvailableADComputerName Laptop
+   100NB004
+#>
+
 function Get-AvailableADComputerName
 {
     [CmdletBinding()]
@@ -13,6 +26,7 @@ function Get-AvailableADComputerName
     Begin
     {
         # Declare naming convention for machine types
+
         switch ($Type) {
             'Desktop' { $NameConvention = '100WK' }
             'Laptop'  { $NameConvention = '100NB' }
