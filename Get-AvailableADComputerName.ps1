@@ -12,6 +12,7 @@ function Get-AvailableADComputerName
 
     Begin
     {
+        # Declare naming convention for machine types
         switch ($Type) {
             'Desktop' { $NameConvention = '100WK' }
             'Laptop'  { $NameConvention = '100NB' }
