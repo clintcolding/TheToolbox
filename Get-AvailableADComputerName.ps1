@@ -1,33 +1,52 @@
 $Type = "100NB"
 
-$Computers = Get-ADComputer -Filter * | Select Name
+# Get all computers starting with the specified descriptor.
 
-$Computers = $Computers | Where-Object {$_.Name -like "$Type*"}
+$Computers = Get-ADComputer -Filter * | Where-Object {$_.Name -like "$Type*"} | Select-Object Name
+
+# Create empty array
 
 [System.Collections.ArrayList]$ComputerList = @()
 
-foreach ($name in $Computers) {
-    $id = $name.name.replace('100NB','')
-    
-    $computerlist.add($id) | Out-Null
+# Cycle through each computer in the $Computers variable and remove the $Type.
+# Then add the remaining value to the $ComputerList array.
+
+foreach ($Name in $Computers) {
+    $ID = $Name.name.replace($Type,'')
+    $ComputerList.add($id) | Out-Null
 }
 
-$computerlist = $computerlist | sort
+# Sort the array
 
-$counter = 0
+$ComputerList = $ComputerList | Sort-Object
 
-foreach ($id in $ComputerList) {
-    if (([int]$id + 1) -ne ($ComputerList[$counter+1])) {
-        [string]$availableid = ([int]$id + 1)
+# Initialize an iteration counter
+
+$Counter = 0
+
+# Determine if the current ID + 1 is equal or not equal to the next ID
+# If equal, continue to next ID and add 1 to $Counter
+# If not equal, store ID in $availableID and break loop
+
+foreach ($ID in $ComputerList) {
+    if (([int]$ID + 1) -ne ($ComputerList[$Counter + 1])) {
+        [string]$AvailableID = ([int]$ID + 1)
         break
     }
     else {
-        $counter++
+        $Counter++
     }
 }
 
-if ($availableid.Length -eq 1) {Write-Output ($Type + "00" + $availableid)}
-if ($availableid.Length -eq 2) {Write-Output ($Type + "0" + $availableid)}
-if ($availableid.Length -eq 3) {Write-Output ($Type + $availableid)}
+# Reconstruct computername using $Type and adding back leading zeros if needed
 
-### Create test to ensure new ID is truly available before returning!
+if ($AvailableID.Length -eq 1) {$NewName = ($Type + "00" + $AvailableID)}
+if ($AvailableID.Length -eq 2) {$NewName = ($Type + "0" + $AvailableID)}
+if ($AvailableID.Length -eq 3) {$NewName = ($Type + $AvailableID)}
+
+# Test to ensure $NewName is truly available (it should return an error)
+# If $NewName is availble return $NewName, if it isn't return Write-Output
+
+try {Get-ADComputer $NewName -ErrorAction Stop | Out-Null
+     Write-Output "Cannot find available ID for $Type"}
+    catch {$NewName}
