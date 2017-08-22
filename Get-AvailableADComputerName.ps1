@@ -10,7 +10,6 @@
    PS C:\bin> Get-AvailableADComputerName Laptop
    100NB004
 #>
-
 function Get-AvailableADComputerName
 {
     [CmdletBinding()]
@@ -34,7 +33,7 @@ function Get-AvailableADComputerName
     }
     Process
     {
-        # Get all computers starting with the specified descriptor.
+        # Get all computers starting with the specified naming convention.
 
         $Computers = Get-ADComputer -Filter * | Where-Object {$_.Name -like "$NameConvention*"} | Select-Object Name
 
