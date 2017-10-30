@@ -23,7 +23,8 @@ function Upgrade-VM
             ## Shutdown VM Guest OS if needed
 
             if ((Get-VM $VM).PowerState -eq 'PoweredOn') {
-                Shutdown-VMGuest -VM $VM -Confirm:$false
+                Write-Verbose "Shutting down guest OS..."
+                Shutdown-VMGuest -VM $VM -Confirm:$false | Out-Null
             }
 
             ## If VM is powered off, upgrade VM version, else delay 10 seconds and try again.
@@ -33,7 +34,8 @@ function Upgrade-VM
             while ($true) {
                 
                 if ((Get-VM $VM).PowerState -eq 'PoweredOff') {
-                    Set-VM -VM $VM -Version v13 -Confirm:$false
+                    Write-Verbose "Upgrading $VM to VM version v13..."
+                    Set-VM -VM $VM -Version v13 -Confirm:$false | Out-Null
                     break
                 }
                 else {
@@ -43,7 +45,7 @@ function Upgrade-VM
                     }
                     else {
                         $RetryCount++
-                        Write-Host "Attempt $RetryCount"
+                        Write-Verbose "Waiting for $VM to power off..."
                         Start-Sleep -Seconds 15
                     }
                 }
@@ -53,7 +55,8 @@ function Upgrade-VM
         ## Confirm VM Version upgrade was successful
 
         if ((Get-VM $VM).Version -eq "v13" -and (Get-VM $VM).PowerState -eq 'PoweredOff') {
-            Start-VM -VM $VM
+            Write-Verbose "Powering on $VM..."
+            Start-VM -VM $VM | Out-Null
         }
         elseif ((Get-VM $VM).Version -ne "v13") {
             Write-Warning "Failed to upgrade $VM to v13!"
@@ -66,23 +69,26 @@ function Upgrade-VM
 
         while ($true) {
 
-            if ((Test-Connection $VM -Count 2) -and (Get-VM $VM).ExtensionData.Guest.ToolsStatus -eq 'toolsOld') {
-                Update-Tools -VM $VM
+            if ((Get-VM $VM).ExtensionData.Guest.ToolsStatus -eq 'toolsOld') {
+                Start-Sleep -Seconds 15
+                Write-Verbose "Updating VM Tools on $VM..."
+                Update-Tools -VM $VM -warn | Out-Null
                 break
             }
 
-            if ((Test-Connection $VM -Count 2) -and (Get-VM $VM).ExtensionData.Guest.ToolsStatus -eq 'toolsOk') {
+            if ((Get-VM $VM).ExtensionData.Guest.ToolsStatus -eq 'toolsOk') {
+                Write-Message "VM Tools already current!"
                 break
             }
 
             else {
                 if ($RetryCount -gt 10) {
-                    Write-Warning "Unable to connect to $VM"
+                    Write-Warning "VM Tools not running on $VM!"
                     break
                 }
                 else {
                     $RetryCount++
-                    Write-Host "Attempt $RetryCount"
+                    Write-Verbose "Waiting for guest OS..."
                     Start-Sleep -Seconds 15
                 }
             }
