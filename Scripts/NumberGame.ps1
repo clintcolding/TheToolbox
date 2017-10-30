@@ -1,4 +1,4 @@
-function Start-NumberGame {
+function NumberGame {
     $number = Get-Random -Minimum 1 -Maximum 100
     $guessattempts = 1
 
