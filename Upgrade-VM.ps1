@@ -1,61 +1,92 @@
-$VM = 'testvm'
+function Upgrade-VM
+{
+    [CmdletBinding()]
+    Param
+    (
+        [Parameter(Position=0)]
+        [String[]]$VM
+    )
+    Begin{}
 
-## Confirm VM exists
+    Process{
 
-if (!(Get-VM $VM -ErrorAction SilentlyContinue)) {
-    Write-Warning "$VM not found!"
-}
+        ## Confirm VM exists
 
-## If VM is powered on, shutdown VM Guest OS
+        if (!(Get-VM $VM -ErrorAction SilentlyContinue)) {
+            Write-Warning "$VM not found!"
+        }
 
-if ((Get-VM $VM).PowerState -eq 'PoweredOn') {
-    Shutdown-VMGuest -VM $VM -Confirm:$false
-}
+        ## Determine if VM version needs to be upgraded
 
-## If VM is powered off, upgrade VM version, else delay 10 seconds and try again.
+        if ((Get-VM $VM).Version -ne "v13") {
+        
+            ## Shutdown VM Guest OS if needed
 
-$RetryCount = 0
+            if ((Get-VM $VM).PowerState -eq 'PoweredOn') {
+                Shutdown-VMGuest -VM $VM -Confirm:$false
+            }
 
-while ($true) {
-    
-    if ((Get-VM $VM).PowerState -eq 'PoweredOff') {
-        Set-VM -VM $VM -Version v13 -Confirm:$false
-        break
-    }
-    else {
-        if ($RetryCount -gt 10) {
-            Write-Warning "Failed to power off $VM"
+            ## If VM is powered off, upgrade VM version, else delay 10 seconds and try again.
+
+            $RetryCount = 0
+
+            while ($true) {
+                
+                if ((Get-VM $VM).PowerState -eq 'PoweredOff') {
+                    Set-VM -VM $VM -Version v13 -Confirm:$false
+                    break
+                }
+                else {
+                    if ($RetryCount -gt 10) {
+                        Write-Warning "Failed to power off $VM"
+                        break
+                    }
+                    else {
+                        $RetryCount++
+                        Write-Host "Attempt $RetryCount"
+                        Start-Sleep -Seconds 15
+                    }
+                }
+            }
+        }
+
+        ## Confirm VM Version upgrade was successful
+
+        if ((Get-VM $VM).Version -eq "v13" -and (Get-VM $VM).PowerState -eq 'PoweredOff') {
+            Start-VM -VM $VM
+        }
+        elseif ((Get-VM $VM).Version -ne "v13") {
+            Write-Warning "Failed to upgrade $VM to v13!"
             break
         }
-        else {
-            $RetryCount++
-            Write-Host "Attempt $RetryCount"
-            Start-Sleep -Seconds 15
+
+        ## Once VM guest is online confirm VM Tool update is needed, if so, Update-Tools
+
+        $RetryCount = 0
+
+        while ($true) {
+
+            if ((Test-Connection $VM -Count 2) -and (Get-VM $VM).ExtensionData.Guest.ToolsStatus -eq 'toolsOld') {
+                Update-Tools -VM $VM
+                break
+            }
+
+            if ((Test-Connection $VM -Count 2) -and (Get-VM $VM).ExtensionData.Guest.ToolsStatus -eq 'toolsOk') {
+                break
+            }
+
+            else {
+                if ($RetryCount -gt 10) {
+                    Write-Warning "Unable to connect to $VM"
+                    break
+                }
+                else {
+                    $RetryCount++
+                    Write-Host "Attempt $RetryCount"
+                    Start-Sleep -Seconds 15
+                }
+            }
         }
     }
-}
-
-if ((Get-VM $VM).Version -eq "v13") {
-    Start-VM -VM $VM
-}
-
-$RetryCount = 0
-
-while ($true) {
-
-    if (Test-Connection $VM -Count 2) {
-        Update-Tools -VM $VM
-        break
-    }
-    else {
-        if ($RetryCount -gt 10) {
-            Write-Warning "Unable to connect to $VM"
-            break
-        }
-        else {
-            $RetryCount++
-            Write-Host "Attempt $RetryCount"
-            Start-Sleep -Seconds 15
-        }
-    }
+    End{}
 }
