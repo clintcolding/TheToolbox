@@ -23,3 +23,4 @@ The Toolbox is a catch all for my miscellaneous functions.
 - VMware
   - Create-VM - Creates a VMware virtual machine based on environment specific values.
   - Map-Datastore - Maps a VMware datastore to a PSDrive.
+  - Upgrade-VM - Upgrades a VM's hardware version and/or VM Tools if needed.
