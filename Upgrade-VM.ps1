@@ -72,7 +72,7 @@ function Upgrade-VM
             if ((Get-VM $VM).ExtensionData.Guest.ToolsStatus -eq 'toolsOld') {
                 Start-Sleep -Seconds 15
                 Write-Verbose "Updating VM Tools on $VM..."
-                Update-Tools -VM $VM -warn | Out-Null
+                Update-Tools -VM $VM -WarningAction SilentlyContinue | Out-Null
                 break
             }
 
