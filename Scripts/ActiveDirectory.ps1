@@ -2,7 +2,17 @@
 
 $user = 'ccolding'
 
-Get-ADPrincipalGroupMembership $user | Select-Object -Property Name, GroupScope, GroupCategory | Sort-Object -Property Name | Format-Table -A
+$groups = Get-ADPrincipalGroupMembership $user
+
+$groups | Select-Object -Property Name, GroupScope, GroupCategory | Sort-Object -Property Name | Format-Table -A
+
+### Remove all AD Group Membership ###
+
+foreach ($group in $groups) {
+    if ($group.name -ne "Domain Users") {
+        Remove-ADGroupMember -Identity $group.name -Members $user -Confirm:$false
+    }
+}
 
 ### Exchange Mailbox Forward ###
 
