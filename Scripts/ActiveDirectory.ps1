@@ -19,3 +19,21 @@ foreach ($group in $groups) {
 Set-Mailbox -Identity user -DeliverToMailboxAndForward $true -ForwardingSMTPAddress "user@company.com"
 
 Set-Mailbox -Identity user -DeliverToMailboxAndForward $false -ForwardingSmtpAddress $null
+
+### Get AD Users Created 2017 ###
+
+$users = Get-ADUser -Filter * -SearchBase "OU=Tampa Users,OU=Tampa,OU=Sites,DC=A1,DC=local" -Properties whenCreated
+
+foreach ($user in $users) {
+    if ($user.whenCreated -ge "1/1/2017" -and $user.whenCreated -le "12/31/2017") {
+
+        $Prop = [ordered] @{
+            'User' = $user.Name
+            'CreatedOn' = $user.whenCreated
+        }
+
+        $Obj = New-Object -TypeName PSObject -Property $Prop
+
+        Write-Output $Obj
+    } 
+}
